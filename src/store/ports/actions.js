@@ -1,7 +1,10 @@
 import Vue from 'vue'
 
-export const getPorts = async ({commit}) => {
-  await Vue.axios.get('/ports?page=2')
+export const getPorts = async ({commit}, page) => {
+  const defaultUrl = '/ports'
+  const pagedUrl = `/ports?page=${page}`
+  const url = page ? pagedUrl : defaultUrl
+  await Vue.axios.get(url)
     .then(response => {
       commit('SET_PORTS', response.data.data)
       commit('SET_LINKS', response.data.links)

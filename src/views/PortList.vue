@@ -8,6 +8,8 @@
     >
     </b-img>
     <h3 class=""> Puertos marítimos</h3>
+
+    <!-- FILTER -->
     <b-input-group size="sm" class="mb-3">
       <b-input-group-prepend is-text>
         <b-icon icon="search"></b-icon>
@@ -18,9 +20,9 @@
         placeholder="Puedes filtrar por nombre, país, continente o coordenadas"
       ></b-form-input>
     </b-input-group>
-    <b-table
-      :current-page="currentPage"
-      :per-page="perPage"
+
+    <!-- TABLE -->
+    <b-table      
       :filter="filter"
       responsive
       sticky-header="700px"
@@ -50,6 +52,7 @@
       </template>
     </b-table>
 
+    <!-- PAGINATION -->
     <b-pagination
       v-model="currentPage"
       :total-rows="meta.total"
@@ -63,6 +66,7 @@
       prev-text="Anterior"
       next-text="Siguiente"
       last-text="Última"
+      @change="fetchPorts"
     ></b-pagination>
   </div>
 </template>
@@ -101,11 +105,7 @@ export default {
     }
   },
   async created() {
-    this.loading = true
-    await this.getPorts()
-    this.currentPage = this.meta.current_page
-    this.perPage = this.meta.per_page
-    this.loading = false
+    await this.fetchPorts()
   },
   computed: {
     ...mapGetters('Ports', ['ports', 'links', 'meta']),
@@ -126,7 +126,14 @@ export default {
       const url 
         = `https://www.google.com/maps/search/?api=1&query=${encodedCoordinates}`
       window.open(url, '_blank');
-    }
+    },
+    async fetchPorts(page) {
+      this.loading = true
+      await this.getPorts(page)
+      this.currentPage = this.meta.current_page
+      this.perPage = this.meta.per_page
+      this.loading = false
+    },
   }
 }
 </script>
