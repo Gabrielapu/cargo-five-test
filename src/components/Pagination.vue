@@ -1,7 +1,8 @@
 <template>
   <div>
+    <small class="text-info">Páginas</small>
     <b-pagination
-      class="mb-0"
+      class="mt-2"
       v-model="currentPage"
       :total-rows="meta.total"
       pills
@@ -14,7 +15,6 @@
       last-text="Última"
       @change="fetchPorts"
     ></b-pagination>
-    <small class="text-info">Páginas</small>
   </div>
 </template>
 
