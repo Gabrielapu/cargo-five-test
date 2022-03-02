@@ -1,147 +1,37 @@
 <template>
   <div class="container text-center">
-    <b-img
-      class="mb-5"
-      fluid
-      alt="cargofive"
-      src="../assets/cargoFiveLogo.png"
-    >
-    </b-img>
-    <h3 class=""> Puertos marítimos</h3>
-
-    <!-- FILTER -->
-    <b-input-group size="sm" class="mb-3">
-      <b-input-group-prepend is-text>
-        <b-icon icon="search"></b-icon>
-      </b-input-group-prepend>
-      <b-form-input
-        v-model="filter"
-        type="search"
-        placeholder="Puedes filtrar por nombre, país, continente o coordenadas"
-      ></b-form-input>
-    </b-input-group>
-
-    <!-- TABLE -->
-    <b-table      
-      :filter="filter"
-      responsive
-      sticky-header="700px"
-      head-variant="light"
-      :items="items"
-      :fields="fields"
-      primary-key="id"
-      striped
-      :busy="loading"
-      sort-icon-left
-    >
-      <template #table-busy>
-        <div class="text-center text-primary my-2">
-          <b-spinner class="align-middle mr-1"></b-spinner>
-          <strong>Cargando...</strong>
-        </div>
-      </template>
-
-      <template #cell(coordinates)="{ item }">
-        <div
-          @click="seeOnMap(item.coordinates)"
-          class="cursor-pointer coordinates"
-          v-b-tooltip="'Haz click para ver en el mapa'"
-        >
-          {{item.coordinates}}
-        </div>
-      </template>
-    </b-table>
-
-    <!-- PAGINATION -->
-    <b-pagination
-      v-model="currentPage"
-      :total-rows="meta.total"
-      pills
-      align="center"
-      :per-page="perPage"
-      limit="10"
-      size="sm"
-      class="my-0"
-      first-text="Primera"
-      prev-text="Anterior"
-      next-text="Siguiente"
-      last-text="Última"
-      @change="fetchPorts"
-    ></b-pagination>
+    <b-img class="mb-5" fluid src="../assets/cargoFiveLogo.png"></b-img>
+    <h3 class="mb-3"> PUERTOS MARÍTIMOS</h3>
+    <FilterInput @input="filter = $event" />
+    <PortsTable :filter="filter"/>
+    <Pagination />
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import continents from '@/mixins/continents'
+import { mapActions } from 'vuex'
+import Pagination from '@/components/Pagination'
+import PortsTable from '@/components/PortsTable'
+import FilterInput from '@/components/FilterInput'
+
 export default {
   name: 'Home',
-  mixins: [continents],
+  components: { Pagination, PortsTable, FilterInput },
   data() {
     return {
-      loading: false,
-      filter: '',
-      currentPage: 1,
-      perPage: 100,
-      fields: [
-        {
-          key: 'name',
-          label: 'Nombre',
-          stickyColumn: true
-        },
-        {
-          key: 'country',
-          label: 'País'
-        },
-        {
-          key: 'continent',
-          label: 'Continente'
-        },
-        {
-          key: 'coordinates',
-          label: 'Coordenadas'
-        }
-      ]
+      filter: ''
     }
   },
   async created() {
     await this.fetchPorts()
   },
-  computed: {
-    ...mapGetters('Ports', ['ports', 'links', 'meta']),
-    items() {
-      return this.ports.map(port => ({
-        continent: this.continents[port.continent],
-        coordinates: port.coordinates || 'Sin coordenadas',
-        country: port.country,
-        id: port.id,
-        name: port.name
-      }))
-    }
-  },
   methods: {
     ...mapActions('Ports', ['getPorts']),
-    seeOnMap(coordinates) {
-      const encodedCoordinates = encodeURI(coordinates)
-      const url 
-        = `https://www.google.com/maps/search/?api=1&query=${encodedCoordinates}`
-      window.open(url, '_blank');
-    },
-    async fetchPorts(page) {
-      this.loading = true
-      await this.getPorts(page)
-      this.currentPage = this.meta.current_page
-      this.perPage = this.meta.per_page
-      this.loading = false
-    },
+    async fetchPorts() {
+      this.$store.commit('Ports/SET_LOADING', true)
+      await this.getPorts()
+      this.$store.commit('Ports/SET_LOADING', false)
+    }
   }
 }
 </script>
-<style scoped>
-.cursor-pointer {
-  cursor: pointer;
-}
-.coordinates:hover {
-  font-weight: bold;
-}
-</style>

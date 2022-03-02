@@ -7,7 +7,6 @@ export const getPorts = async ({commit}, page) => {
   await Vue.axios.get(url)
     .then(response => {
       commit('SET_PORTS', response.data.data)
-      commit('SET_LINKS', response.data.links)
       commit('SET_META', response.data.meta)
     })
     .catch(error => {

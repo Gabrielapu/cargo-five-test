@@ -6,8 +6,8 @@ const Ports = {
   namespaced: true,
   state: {
     ports: [],
-    links: {},
-    meta: {}
+    meta: {},
+    loading: false
   },
   getters,
   mutations,
