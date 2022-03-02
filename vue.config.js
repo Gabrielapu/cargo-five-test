@@ -1,3 +1,5 @@
+/* Archivo de configuracion para componentes de boostrapVue.
+Permite agregar archivos locales como src.*/
 module.exports = {
   chainWebpack: config => {
     config.module
@@ -17,7 +19,6 @@ module.exports = {
           'b-carousel-slide': 'img-src',
           'b-embed': 'src'
         }
-
         return options
       })
   }
