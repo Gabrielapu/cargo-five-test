@@ -1,3 +1,4 @@
+// Este mixin permite reconocer el nombre del continente en base al código
 export default {
   data() {
     return {

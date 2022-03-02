@@ -79,6 +79,7 @@ export default {
   },
   methods: {
     ...mapActions('Ports', ['getPorts']),
+    // Permite ver en el mapa los puertos que tengan coordenadas
     seeOnMap(coordinates) {
       if(!coordinates) return 
       const encodedCoordinates = encodeURI(coordinates)

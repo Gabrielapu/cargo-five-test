@@ -15,7 +15,7 @@ import PortsTable from '@/components/PortsTable'
 import FilterInput from '@/components/FilterInput'
 
 export default {
-  name: 'Home',
+  name: 'PortList',
   components: { Pagination, PortsTable, FilterInput },
   data() {
     return {
@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     ...mapActions('Ports', ['getPorts']),
+    // Gattilla la accion de obtener los puertos y activa el loading
     async fetchPorts() {
       this.$store.commit('Ports/SET_LOADING', true)
       await this.getPorts()

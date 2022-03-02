@@ -35,6 +35,7 @@ export default {
   methods: {
     ...mapActions('Ports', ['getPorts']),
     async fetchPorts(page) {
+      // Permite obtener los puertos relacionados a la página elegida
       this.$store.commit('Ports/SET_LOADING', true)
       await this.getPorts(page)
       this.currentPage = this.meta.current_page

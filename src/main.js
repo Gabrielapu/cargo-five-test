@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
+//Plugins
 import '@/plugins/bootstrapvue'
 import '@/plugins/axios'
 
