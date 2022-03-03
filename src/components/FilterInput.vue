@@ -4,6 +4,7 @@
       <b-icon icon="search"></b-icon>
     </b-input-group-prepend>
     <b-form-input
+      autofocus
       type="search"
       placeholder="Puedes filtrar por nombre, país, continente o coordenadas"
       @input="$emit('input', $event)"
